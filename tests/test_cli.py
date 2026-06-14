@@ -63,3 +63,20 @@ def test_print_ocr_result(capsys):
     assert "OCR:" in captured.out
     assert "Used: True" in captured.out
     assert "RADAR OCR Pipeline" in captured.out
+
+
+def test_print_result_without_export_still_works(capsys):
+    result = PipelineResult(
+        source_path="sample.json",
+        file_type="json",
+        status="ok",
+        message="Detected json document: sample.json",
+    )
+
+    print_result(result)
+
+    captured = capsys.readouterr()
+
+    assert "DOCUMENT PIPELINE MVP" in captured.out
+    assert "sample.json" in captured.out
+    assert "json" in captured.out

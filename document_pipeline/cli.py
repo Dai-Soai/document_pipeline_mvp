@@ -11,6 +11,20 @@ def print_result(result):
     print(f"Type: {result.file_type}")
     print(f"Status: {result.status}")
     print()
+
+    if result.text_result is not None:
+        print("Metadata:")
+        print(f"  Characters: {result.text_result.characters}")
+        print(f"  Words: {result.text_result.words}")
+        print(f"  Lines: {result.text_result.line_count}")
+        print()
+        print("Summary:")
+        print(result.text_result.summary)
+        print()
+        print("Preview:")
+        print(result.text_result.preview)
+        print()
+
     print(result.message)
 
 

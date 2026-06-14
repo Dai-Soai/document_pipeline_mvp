@@ -1,0 +1,32 @@
+import argparse
+
+from document_pipeline.pipeline import run_pipeline
+
+
+def print_result(result):
+    print("=" * 60)
+    print("DOCUMENT PIPELINE MVP")
+    print("=" * 60)
+    print(f"Source: {result.source_path}")
+    print(f"Status: {result.status}")
+    print()
+    print(result.message)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog="doc-pipe",
+        description="Document Pipeline MVP",
+    )
+
+    parser.add_argument("file", help="Path to input document")
+
+    args = parser.parse_args()
+
+    result = run_pipeline(args.file)
+
+    print_result(result)
+
+
+if __name__ == "__main__":
+    main()

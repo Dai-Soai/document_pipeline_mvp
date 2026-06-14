@@ -1,6 +1,6 @@
 import argparse
 
-from document_pipeline.exporter import export_json_report
+from document_pipeline.exporter import export_json_report, export_markdown_report
 from document_pipeline.pipeline import run_pipeline
 
 
@@ -61,6 +61,7 @@ def main():
 
     parser.add_argument("file", help="Path to input document")
     parser.add_argument("--json", help="Export pipeline report to JSON file")
+    parser.add_argument("--md", help="Export pipeline report to Markdown file")
 
     args = parser.parse_args()
 
@@ -72,6 +73,11 @@ def main():
         output_path = export_json_report(result, args.json)
         print()
         print(f"JSON report exported: {output_path}")
+
+    if args.md:
+        output_path = export_markdown_report(result, args.md)
+        print()
+        print(f"Markdown report exported: {output_path}")
 
 
 if __name__ == "__main__":

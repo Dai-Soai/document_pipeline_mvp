@@ -77,3 +77,77 @@ def export_json_report(result: PipelineResult, output_path: str) -> str:
     )
 
     return str(path)
+
+
+def pipeline_result_to_markdown(result: PipelineResult) -> str:
+    payload = pipeline_result_to_dict(result)
+
+    lines = [
+        "# Document Pipeline Report",
+        "",
+        "## Source",
+        "",
+        f"- Path: `{payload['source']['path']}`",
+        f"- Type: `{payload['source']['type']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Message: {payload['message']}",
+        "",
+        "## Processing",
+        "",
+        f"- OCR Used: `{payload['processing']['ocr_used']}`",
+        "",
+    ]
+
+    metadata = payload.get("metadata", {})
+
+    lines.extend(
+        [
+            "## Metadata",
+            "",
+            f"- Characters: `{metadata.get('characters', 0)}`",
+            f"- Words: `{metadata.get('words', 0)}`",
+            f"- Line Count: `{metadata.get('line_count', 0)}`",
+            "",
+        ]
+    )
+
+    summary = payload.get("summary", {})
+
+    lines.extend(
+        [
+            "## Summary",
+            "",
+            summary.get("text", "") or "_No summary available._",
+            "",
+            "## Preview",
+            "",
+            summary.get("preview", "") or "_No preview available._",
+            "",
+        ]
+    )
+
+    content = payload.get("content", {})
+
+    lines.extend(
+        [
+            "## Extracted Content",
+            "",
+            "```text",
+            content.get("text", "") or "",
+            "```",
+            "",
+        ]
+    )
+
+    return "\n".join(lines)
+
+
+def export_markdown_report(result: PipelineResult, output_path: str) -> str:
+    path = Path(output_path).expanduser().resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    markdown = pipeline_result_to_markdown(result)
+
+    path.write_text(markdown, encoding="utf-8")
+
+    return str(path)

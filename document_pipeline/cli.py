@@ -8,6 +8,7 @@ def print_result(result):
     print("DOCUMENT PIPELINE MVP")
     print("=" * 60)
     print(f"Source: {result.source_path}")
+    print(f"Type: {result.file_type}")
     print(f"Status: {result.status}")
     print()
     print(result.message)

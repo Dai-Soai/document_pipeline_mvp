@@ -3,6 +3,37 @@ import argparse
 from document_pipeline.pipeline import run_pipeline
 
 
+def print_text_report(text_result):
+    print("Metadata:")
+    print(f"  Characters: {text_result.characters}")
+    print(f"  Words: {text_result.words}")
+    print(f"  Lines: {text_result.line_count}")
+    print()
+    print("Summary:")
+    print(text_result.summary)
+    print()
+    print("Preview:")
+    print(text_result.preview)
+    print()
+
+
+def print_ocr_report(ocr_result):
+    print("OCR:")
+    print(f"  Used: {ocr_result.ocr_used}")
+    print()
+    print("Metadata:")
+    print(f"  Characters: {ocr_result.characters}")
+    print(f"  Words: {ocr_result.words}")
+    print(f"  Lines: {ocr_result.line_count}")
+    print()
+    print("Summary:")
+    print(ocr_result.summary)
+    print()
+    print("Preview:")
+    print(ocr_result.preview)
+    print()
+
+
 def print_result(result):
     print("=" * 60)
     print("DOCUMENT PIPELINE MVP")
@@ -13,17 +44,10 @@ def print_result(result):
     print()
 
     if result.text_result is not None:
-        print("Metadata:")
-        print(f"  Characters: {result.text_result.characters}")
-        print(f"  Words: {result.text_result.words}")
-        print(f"  Lines: {result.text_result.line_count}")
-        print()
-        print("Summary:")
-        print(result.text_result.summary)
-        print()
-        print("Preview:")
-        print(result.text_result.preview)
-        print()
+        print_text_report(result.text_result)
+
+    if result.ocr_result is not None:
+        print_ocr_report(result.ocr_result)
 
     print(result.message)
 

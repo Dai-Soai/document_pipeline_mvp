@@ -5,9 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "document-pipeline-mvp"
 version = "0.1.0"
-description = "Document Pipeline MVP for routing text and image documents through reusable RADAR utilities."
+description = "Document Pipeline MVP for routing text and image documents through reusable RADAR utility services."
 requires-python = ">=3.11"
 readme = "README.md"
+dependencies = [
+    "pillow>=10.0",
+    "pytesseract>=0.3.10"
+]
 
 [project.optional-dependencies]
 dev = [

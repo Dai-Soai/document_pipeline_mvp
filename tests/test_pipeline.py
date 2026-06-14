@@ -1,6 +1,14 @@
 import pytest
+from PIL import Image, ImageDraw
 
 from document_pipeline.pipeline import run_pipeline
+
+
+def create_test_image(path, text="RADAR OCR Pipeline"):
+    image = Image.new("RGB", (800, 250), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((40, 100), text, fill="black")
+    image.save(path)
 
 
 def test_run_pipeline_accepts_existing_text_file(tmp_path):
@@ -12,20 +20,24 @@ def test_run_pipeline_accepts_existing_text_file(tmp_path):
     assert result.status == "ok"
     assert result.file_type == "text"
     assert result.text_result is not None
+    assert result.ocr_result is None
     assert result.text_result.summary == "Sample Document"
     assert "Processed text document" in result.message
 
 
 def test_run_pipeline_accepts_existing_image_file(tmp_path):
     sample = tmp_path / "sample.png"
-    sample.write_bytes(b"fake image data")
+    create_test_image(sample)
 
     result = run_pipeline(str(sample))
 
     assert result.status == "ok"
     assert result.file_type == "image"
     assert result.text_result is None
-    assert "Detected image document" in result.message
+    assert result.ocr_result is not None
+    assert result.ocr_result.ocr_used is True
+    assert result.ocr_result.characters >= 0
+    assert "Processed image document with OCR" in result.message
 
 
 def test_run_pipeline_accepts_existing_json_file(tmp_path):
@@ -37,6 +49,7 @@ def test_run_pipeline_accepts_existing_json_file(tmp_path):
     assert result.status == "ok"
     assert result.file_type == "json"
     assert result.text_result is None
+    assert result.ocr_result is None
     assert "Detected json document" in result.message
 
 

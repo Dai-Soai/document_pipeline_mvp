@@ -1,3 +1,4 @@
+from document_pipeline.batch import BatchItemResult, BatchResult
 from document_pipeline.cli import print_result
 from document_pipeline.ocr_processor import OcrDocumentResult
 from document_pipeline.pipeline import PipelineResult
@@ -80,3 +81,30 @@ def test_print_result_without_export_still_works(capsys):
     assert "DOCUMENT PIPELINE MVP" in captured.out
     assert "sample.json" in captured.out
     assert "json" in captured.out
+
+
+def test_print_batch_result(capsys):
+    batch_result = BatchResult(
+        input_dir="data/batch_docs",
+        total_files=1,
+        processed=1,
+        skipped=0,
+        failed=0,
+        items=[
+            BatchItemResult(
+                source_path="data/batch_docs/sample.md",
+                status="ok",
+                message="Processed batch item: sample.md",
+            )
+        ],
+    )
+
+    from document_pipeline.cli import print_batch_result
+
+    print_batch_result(batch_result)
+
+    captured = capsys.readouterr()
+
+    assert "DOCUMENT PIPELINE BATCH" in captured.out
+    assert "Processed: 1" in captured.out
+    assert "sample.md" in captured.out

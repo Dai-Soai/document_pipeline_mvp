@@ -1,0 +1,3 @@
+RADAR Batch Plain Text
+
+This is a text file for batch processing.
